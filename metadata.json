@@ -1,0 +1,9 @@
+{
+  "name": "OmniAgent",
+  "description": "A complete multimodal AI agent featuring standard chat with grounding/vision capabilities and a real-time Live API voice interface.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera",
+    "geolocation"
+  ]
+}
