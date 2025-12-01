@@ -87,7 +87,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           <div className="w-14 h-14 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform">
             <BookOpen className="w-7 h-7" />
           </div>
-          <h3 className="text-2xl font-bold text-white mb-2">Nova Mentor</h3>
+          <h3 className="text-2xl font-bold text-white mb-2">EagleNova Mentor</h3>
           <p className="text-slate-400 mb-6">Simulated AI guidance for quick answers on common trading questions and psychology.</p>
           <span className="text-amber-400 font-semibold flex items-center gap-2 group-hover:gap-3 transition-all">
             Chat Now <ArrowRight className="w-4 h-4" />
