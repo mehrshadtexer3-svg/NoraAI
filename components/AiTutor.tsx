@@ -9,7 +9,7 @@ const AiTutor: React.FC = () => {
     {
       id: 'welcome',
       role: 'model',
-      content: "**Nora Ready.**\n\nI am your dedicated Trading Mentor. I do not rely on external servers. My knowledge base includes:\n\n*   Institutional Price Action\n*   Advanced Risk Management\n*   Chart Pattern Recognition\n\nAsk me a specific question like *'What is a Bear Flag?'* or *'How do I calculate position size?'*",
+      content: "**EagleNova Mentor Is Ready.**\n\nI am your dedicated Trading Mentor. I do not rely on external servers. My knowledge base includes:\n\n*   Institutional Price Action\n*   Advanced Risk Management\n*   Chart Pattern Recognition\n\nAsk me a specific question like *'What is a Bear Flag?'* or *'How do I calculate position size?'*",
       timestamp: new Date()
     }
   ]);
