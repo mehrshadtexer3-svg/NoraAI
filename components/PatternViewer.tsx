@@ -5,11 +5,8 @@ import { PatternData } from '../types';
 
 const COMMON_PATTERNS = [
   "Head and Shoulders",
-  "Inverse Head and Shoulders",
   "Double Top",
-  "Double Bottom",
-  "Bull Flag",
-  "Bear Flag"
+  "Bull Flag"
 ];
 
 // --- ADVANCED CHART RENDERER ---
@@ -195,7 +192,7 @@ const PatternChart: React.FC<{ pattern: string }> = ({ pattern }) => {
       {/* Watermark */}
       <div className="absolute bottom-4 left-4 opacity-20">
         <div className="flex items-center gap-2 text-white font-bold text-xl">
-          <TrendingUp /> EAGLE NOVA
+          <TrendingUp /> EAGLENOVA
         </div>
       </div>
     </div>
