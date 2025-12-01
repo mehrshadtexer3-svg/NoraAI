@@ -1,9 +1,5 @@
 {
-  "name": "OmniAgent",
-  "description": "A complete multimodal AI agent featuring standard chat with grounding/vision capabilities and a real-time Live API voice interface.",
-  "requestFramePermissions": [
-    "microphone",
-    "camera",
-    "geolocation"
-  ]
+  "name": "EagleNova",
+  "description": "The ultimate professional trading training platform. Master patterns, strategies, and psychology without limits.",
+  "requestFramePermissions": []
 }
