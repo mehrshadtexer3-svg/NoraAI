@@ -16,17 +16,6 @@ const PATTERN_DB: Record<string, PatternData> = {
       "This pattern often retests the broken neckline (turning support into resistance). That is the safest entry."
     ]
   },
-  "Inverse Head and Shoulders": {
-    name: "Inverse Head and Shoulders",
-    description: "The bullish cousin of the H&S. Found at the bottom of downtrends. It shows sellers pushing price down three times, but failing to make a lower low on the final attempt (Right Shoulder), shifting momentum to buyers.",
-    significance: "Bullish",
-    chartData: [],
-    strategyTips: [
-      "Aggressive Entry: As price breaks the neckline.",
-      "Conservative Entry: Wait for the retest of the neckline.",
-      "Target: Measured move of the Head's height projected upwards."
-    ]
-  },
   "Double Top": {
     name: "Double Top",
     description: "A classic 'M' shape reversal. Price hits a resistance level twice and fails to break it. This creates a zone of supply where institutions are selling heavily.",
@@ -36,17 +25,6 @@ const PATTERN_DB: Record<string, PatternData> = {
       "The second top often has lower volume (divergence).",
       "Entry is ONLY valid when the support valley (neckline) is broken.",
       "Stop loss goes above the highest wick of the formation."
-    ]
-  },
-  "Double Bottom": {
-    name: "Double Bottom",
-    description: "A 'W' shape bullish reversal. Price finds a floor, bounces, tests the floor again, and buyers step in aggressively. It indicates a transfer of stock from weak hands to strong hands.",
-    significance: "Bullish",
-    chartData: [],
-    strategyTips: [
-      "Look for a long wick on the second bottom (Liquidity Grab).",
-      "Entry on the break of the neckline (middle peak).",
-      "Target is the height of the pattern added to the breakout point."
     ]
   },
   "Bull Flag": {
@@ -60,17 +38,6 @@ const PATTERN_DB: Record<string, PatternData> = {
       "Stop loss goes below the lowest point of the flag."
     ]
   },
-  "Bear Flag": {
-    name: "Bear Flag",
-    description: "A bearish continuation. Price drops sharply, then drifts upwards in a tight channel with low volume. Sellers are resting before the next leg down.",
-    significance: "Bearish",
-    chartData: [],
-    strategyTips: [
-      "Entry when the lower trendline of the flag breaks.",
-      "Often occurs after a news event causes a sharp drop.",
-      "Target is the length of the flagpole projected down."
-    ]
-  }
 };
 
 // 2. STRATEGY MASTERCLASS (Deep Content)
