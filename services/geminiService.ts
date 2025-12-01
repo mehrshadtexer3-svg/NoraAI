@@ -173,7 +173,7 @@ const MENTOR_KNOWLEDGE_BASE: BrainNode[] = [
   {
     keywords: ["hello", "hi", "hey", "start", "morning"],
     weight: 1,
-    response: "EagleNova Is Ready. I am **Nora**, your Lead Trading Mentor.\n\nI am here to analyze patterns, refine your strategy, and check your psychology.\n\n**Command me:**\n*   'Explain the Head and Shoulders'\n*   'How do I manage risk?'\n*   'What is a liquidity sweep?'"
+    response: "EagleNova Mentor Is Ready. I am **Nora**, your Lead Trading Mentor.\n\nI am here to analyze patterns, refine your strategy, and check your psychology.\n\n**Command me:**\n*   'Explain the Head and Shoulders'\n*   'How do I manage risk?'\n*   'What is a liquidity sweep?'"
   },
   // --- PSYCHOLOGY (CRITICAL) ---
   {
