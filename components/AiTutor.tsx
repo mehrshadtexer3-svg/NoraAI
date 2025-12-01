@@ -93,10 +93,10 @@ const AiTutor: React.FC = () => {
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-white text-base">Nova Mentor</h3>
+            <h3 className="font-bold text-white text-base">EagleNova Mentor</h3>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-              <span className="text-[10px] text-emerald-400 font-bold tracking-widest uppercase">System Online</span>
+              <span className="text-[10px] text-emerald-400 font-bold tracking-widest uppercase">Ready</span>
             </div>
           </div>
         </div>
