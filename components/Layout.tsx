@@ -78,16 +78,6 @@ const Layout: React.FC<LayoutProps> = ({ currentMode, onModeChange, children }) 
               ))}
             </ul>
           </nav>
-
-          <div className="p-4 border-t border-gray-800">
-            <div className="bg-gray-900/50 rounded-lg p-4 text-xs text-slate-400 border border-gray-700">
-              <p className="font-bold text-trade-primary mb-1 flex items-center gap-1">
-                <CandlestickChart className="w-3 h-3" /> 
-                Market Tip
-              </p>
-              "Plan the trade, trade the plan."
-            </div>
-          </div>
         </div>
       </aside>
 
