@@ -22,10 +22,10 @@ const Layout: React.FC<LayoutProps> = ({ currentMode, onModeChange, children }) 
 
   const navItems = [
     { mode: AppMode.DASHBOARD, label: 'Dashboard', icon: LayoutDashboard },
-    { mode: AppMode.PATTERNS, label: 'Eagle Patterns', icon: TrendingUp },
+    { mode: AppMode.PATTERNS, label: 'Crypto Patterns', icon: TrendingUp },
     { mode: AppMode.STRATEGIES, label: 'Pro Strategies', icon: CandlestickChart },
     { mode: AppMode.QUIZ, label: 'Training Arena', icon: GraduationCap },
-    { mode: AppMode.TUTOR, label: 'Nova Mentor', icon: MessageSquare },
+    { mode: AppMode.TUTOR, label: 'EagleNova Mentor', icon: MessageSquare },
   ];
 
   const handleNavClick = (mode: AppMode) => {
