@@ -1,340 +1,343 @@
-import { PatternData, QuizQuestion } from "../types";
+import { TradeSignal, SignalType, AnalysisRequest, TrendState, PivotLevel } from '../types';
 
-// --- EAGLE NOVA: THE CENTRAL BRAIN ---
+/**
+ * ADVANCED TECHNICAL ANALYSIS ENGINE (PRO VER.)
+ * ---------------------------------------------
+ * Features:
+ * - Multi-Timeframe Correlation (Current, 4H, Daily)
+ * - Institutional Pivot Points (Classic)
+ * - Advanced Indicators: MACD, Bollinger Bands, Volume SMA
+ * - Confluence Scoring Model
+ */
 
-// 1. PATTERN DATABASE (Visual Data & Metadata)
-// Note: Actual visual rendering logic is in PatternViewer.tsx (SVG Engine)
-const PATTERN_DB: Record<string, PatternData> = {
-  "Head and Shoulders": {
-    name: "Head and Shoulders",
-    description: "A bearish reversal pattern that signals the exhaustion of a trend. The market makes a high (Left Shoulder), a higher high (Head), and a lower high (Right Shoulder). The breakdown occurs when the 'Neckline' support is breached.",
-    significance: "Bearish",
-    chartData: [],
-    strategyTips: [
-      "WAIT for the candle close below the neckline. Do not guess.",
-      "The Stop Loss goes strictly above the Right Shoulder.",
-      "This pattern often retests the broken neckline (turning support into resistance). That is the safest entry."
-    ]
-  },
-  "Double Top": {
-    name: "Double Top",
-    description: "A classic 'M' shape reversal. Price hits a resistance level twice and fails to break it. This creates a zone of supply where institutions are selling heavily.",
-    significance: "Bearish",
-    chartData: [],
-    strategyTips: [
-      "The second top often has lower volume (divergence).",
-      "Entry is ONLY valid when the support valley (neckline) is broken.",
-      "Stop loss goes above the highest wick of the formation."
-    ]
-  },
-  "Bull Flag": {
-    name: "Bull Flag",
-    description: "A continuation pattern. After a strong vertical move (The Pole), price consolidates in a gentle downward channel (The Flag). This is merely profit taking before the trend resumes.",
-    significance: "Bullish",
-    chartData: [],
-    strategyTips: [
-      "The Flag should not retrace more than 50% of the Pole.",
-      "Entry on the breakout of the upper channel line.",
-      "Stop loss goes below the lowest point of the flag."
-    ]
-  },
-};
-
-// 2. STRATEGY MASTERCLASS (Deep Content)
-const STRATEGY_DATA: Record<string, string> = {
-  "Scalping": `
-### ⚡ Scalping: The 1-Minute Sniper
-
-**Concept**
-Scalping is the art of stealing small profits from the market repeatedly. A scalper acts like a market maker, providing liquidity and capturing spread inefficiencies. You are not an investor; you are a technician of the immediate moment.
-
-**The "EMA Crossover" Strategy**
-*   **Setup**: 1-Minute Chart (M1).
-*   **Indicators**: 9 EMA (Blue) and 21 EMA (Red).
-*   **The Rules**:
-    1.  **Long**: Wait for the 9 EMA to cross *above* the 21 EMA.
-    2.  **Trigger**: Enter on the pullback to the 9 EMA.
-    3.  **Filter**: The angle of the EMAs must be steep. If they are flat, do not trade.
-    4.  **Exit**: Take profit at 5-10 pips fixed, or if a candle closes below the 21 EMA.
-
-**Pro Tip:**
-> "Scalping is 10% strategy and 90% execution speed. If you hesitate for 2 seconds, the trade is dead. Use one-click trading."
-
-**Risk Protocol**
-*   Max 3 losses per session. Then you quit.
-*   Never trade during major news (Red Folder events). Slippage will destroy you.
-  `,
-
-  "Swing Trading": `
-### 🌊 Swing Trading: Riding the Waves
-
-**Concept**
-Swing trading attempts to capture a single move or "swing" in the market, usually lasting 2 to 6 days. This is the "sweet spot" for most traders as it filters out intraday noise but doesn't require holding through major monthly corrections.
-
-**The "Fibonacci Golden Zone" Strategy**
-*   **Setup**: 4-Hour Chart (H4).
-*   **Tool**: Fibonacci Retracement.
-*   **The Rules**:
-    1.  Identify a strong impulse move (a big rally or drop).
-    2.  Draw Fibs from the Low to the High of that move.
-    3.  **The Zone**: Wait for price to pull back to the **0.50** or **0.618** level.
-    4.  **Trigger**: Look for a reversal candlestick (Hammer, Engulfing) exactly at that level.
-    5.  **Entry**: Buy the break of the reversal candle's high.
-
-**Pro Tip:**
-> "The 0.618 level is where algorithms and banks reload their positions. If price reacts there, you are trading with the Smart Money."
-
-**Risk Protocol**
-*   Stop Loss must go below the 0.786 Fib level.
-*   First Take Profit is the -0.27 extension level.
-  `,
-
-  "Day Trading": `
-### ☀️ Day Trading: The Daily Grind
-
-**Concept**
-Day traders open and close positions within the same trading session. The goal is to capture the daily expansion range.
-
-**The "London/NY Overlap" Strategy**
-*   **Time**: 8:00 AM EST to 11:00 AM EST.
-*   **Concept**: This 3-hour window has the highest volume in the world.
-*   **The Rules**:
-    1.  Mark the High and Low of the "London Session" (3 AM - 8 AM EST).
-    2.  **The Judas Swing**: Often, NY open will fake a breakout in one direction.
-    3.  **Reversal**: If price breaks the London High, traps buyers, and falls back inside, SHORT it.
-    4.  **Target**: The London Low.
-
-**Pro Tip:**
-> "Amateurs chase the breakout. Professionals fade the breakout. Wait for the failure of a move to enter the real move."
-
-**Risk Protocol**
-*   Risk 0.5% to 1% per trade.
-*   Stop trading after 2 consecutive wins. Greed will make you give it back.
-  `,
-
-  "Price Action": `
-### 🕯️ Pure Price Action: Reading the Language
-
-**Concept**
-Price action is the study of price movement over time. It ignores all lagging indicators. It relies on Support, Resistance, Supply, Demand, and Market Structure.
-
-**The "Break and Retest" Strategy**
-*   **The most reliable setup in history.**
-*   **The Logic**: Resistance, once broken, becomes Support.
-*   **The Rules**:
-    1.  Identify a clear horizontal level that price has touched 3+ times.
-    2.  Wait for a **strong** candle to close past this level.
-    3.  **DO NOT CHASE**.
-    4.  Place a Limit Order at the level you just broke.
-    5.  **Entry**: When price returns to "kiss" the level goodbye.
-
-**Pro Tip:**
-> "The 'Retest' is the market checking if there are any sellers left. When the retest holds, the path of least resistance is confirmed."
-
-**Risk Protocol**
-*   Stop Loss goes below the breakout candle.
-*   If price falls back into the range (Fakeout), exit immediately.
-  `,
-
-  "Institutional": `
-### 🏦 Institutional Concepts (SMC)
-
-**Concept**
-Retail traders trade patterns. Banks trade liquidity. Institutional trading involves identifying where the "Smart Money" has placed their orders and riding their coattails.
-
-**The "Liquidity Sweep" Model**
-*   **The Truth**: Banks need your Stop Loss to fill their Buy Orders.
-*   **The Rules**:
-    1.  Spot "Equal Lows" (Double Bottom). Retail traders put stops below these.
-    2.  Wait for a sudden spike DOWN through these lows.
-    3.  This is the **Sweep**.
-    4.  **Displacement**: Look for an immediate, violent reversal UP.
-    5.  **Entry**: Enter on the "Fair Value Gap" (FVG) created by the violent move up.
-
-**Pro Tip:**
-> "If you cannot see the liquidity, YOU are the liquidity. Always ask: 'Where are the retail stop losses?'"
-
-**Risk Protocol**
-*   Strict Stops. This is high precision.
-*   Risk/Reward ratios here are often 1:5 or 1:10.
-  `
-};
-
-// 3. THE "NOVA BRAIN" - MENTOR KNOWLEDGE BASE
-// This replaces the simple keyword list with a structured Q&A brain.
-interface BrainNode {
-  keywords: string[];
-  response: string;
-  weight: number;
+// --- Interfaces for Internal Data ---
+interface Candle {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
 }
 
-const MENTOR_KNOWLEDGE_BASE: BrainNode[] = [
-  // --- GREETINGS ---
-  {
-    keywords: ["hello", "hi", "hey", "start", "morning"],
-    weight: 1,
-    response: "EagleNova Mentor Is Ready. I am **Nora**, your Lead Trading Mentor.\n\nI am here to analyze patterns, refine your strategy, and check your psychology.\n\n**Command me:**\n*   'Explain the Head and Shoulders'\n*   'How do I manage risk?'\n*   'What is a liquidity sweep?'"
-  },
-  // --- PSYCHOLOGY (CRITICAL) ---
-  {
-    keywords: ["fear", "scared", "afraid", "losing", "loss", "red"],
-    weight: 5,
-    response: "**Psychology Alert:** Fear is a reaction to the unknown.\n\nIf you are afraid to pull the trigger, it means one of two things:\n1.  You are risking too much money.\n2.  You do not trust your edge.\n\n**The Fix:** Lower your position size to a point where you *do not care* if you lose. That is the 'Sleeping Point'. Only then can you trade objectively."
-  },
-  {
-    keywords: ["greedy", "greed", "profit", "rich", "money", "target"],
-    weight: 4,
-    response: "**Greed kills more traders than bad analysis.**\n\nWhen you are up, your brain releases dopamine and you want *more*. You move your Take Profit further away. You ignore sell signals.\n\n**Rule:** Set your Take Profit BEFORE you enter the trade. When price hits it, you exit. No exceptions. Leave the last 10% of the move for the gamblers."
-  },
-  {
-    keywords: ["revenge", "angry", "mad", "market rigged"],
-    weight: 5,
-    response: "**STOP TRADING IMMEDIATELY.**\n\nYou are in 'Tilt'. You are trying to hurt the market, but the market does not know you exist. It will only take the rest of your money.\n\n**Protocol:** Close your charts. Walk away. Do not trade for 24 hours. Preserving your capital is more important than making it back today."
-  },
-  // --- RISK MANAGEMENT ---
-  {
-    keywords: ["risk", "size", "lot", "leverage", "manage"],
-    weight: 10, // High priority
-    response: "**Risk Management is the only thing you control.**\n\nHere is the Professional Standard:\n\n1.  **Risk per Trade:** Never more than 1-2% of equity.\n2.  **Reward:** Never take a trade with less than 1:2 R/R.\n3.  **The Math:** If you risk $100 to make $200, you can lose 60% of your trades and still be profitable.\n\n*Without this, you are just a gambler with a chart.*"
-  },
-  {
-    keywords: ["stop", "sl", "stoploss", "protect"],
-    weight: 5,
-    response: "**The Stop Loss is your seatbelt.**\n\nNever enter a trade without it. \n\n**Where to place it?**\n*   **Short:** Above the most recent Lower High.\n*   **Long:** Below the most recent Higher Low.\n\nDo not place it based on a dollar amount (e.g., 'I only want to lose $50'). Place it where the trade setup is *invalidated*."
-  },
-  // --- STRATEGY SPECIFICS ---
-  {
-    keywords: ["trend", "direction", "bias"],
-    weight: 3,
-    response: "**Trend is your friend until it bends.**\n\n*   **Uptrend:** Higher Highs (HH) + Higher Lows (HL).\n*   **Downtrend:** Lower Highs (LH) + Lower Lows (LL).\n\n**The Golden Rule:** Never short a Higher Low, and never buy a Lower High. Wait for the market structure to break before betting against the trend."
-  },
-  {
-    keywords: ["timeframe", "chart", "daily", "hour"],
-    weight: 3,
-    response: "**Top-Down Analysis is key.**\n\n1.  **Daily/Weekly:** Identifies the Direction (The Tide).\n2.  **4-Hour:** Identifies the Zones (The Waves).\n3.  **15-Minute:** Identifies the Entry (The Ripple).\n\nDo not try to catch a 5-minute reversal if the Daily chart is crashing down."
-  },
-  {
-    keywords: ["fake", "fakeout", "trap", "manipulation"],
-    weight: 4,
-    response: "**The Fakeout (Liquidity Grab)**\n\nInstitutions know where retail traders put their stops (right above resistance or below support).\n\nThey will push price *just* past that level to trigger the stops (generating liquidity), then reverse hard.\n\n**Defense:** Wait for the candle to CLOSE. If it wicks past the level but closes inside, it's a trap."
-  },
-  // --- PATTERN HELP ---
-  {
-    keywords: ["head", "shoulder", "hs"],
-    weight: 4,
-    response: "The **Head and Shoulders** is a reliable reversal pattern.\n\n*   **Left Shoulder**: Bulls are strong.\n*   **Head**: Bulls make a new high, but momentum slows.\n*   **Right Shoulder**: Bulls fail to make a new high. Weakness confirmed.\n*   **Entry**: SELL when the Neckline breaks."
-  },
-  {
-    keywords: ["flag", "pennant"],
-    weight: 4,
-    response: "**Flags are profit-taking pauses.**\n\nThink of a Bull Flag as a runner catching their breath. \n\n*   **Look for**: A sharp pole (sprint), followed by a slow, low-volume drift down (breath).\n*   **Action**: Buy the breakout of the top trendline. The trend is resuming."
+// --- Math Library ---
+
+const sum = (arr: number[]) => arr.reduce((a, b) => a + b, 0);
+const mean = (arr: number[]) => sum(arr) / arr.length;
+
+const stdDev = (arr: number[]) => {
+  const avg = mean(arr);
+  const squareDiffs = arr.map(v => Math.pow(v - avg, 2));
+  return Math.sqrt(mean(squareDiffs));
+};
+
+const calculateSMA = (data: number[], period: number): number[] => {
+  const sma: number[] = [];
+  for (let i = 0; i < data.length; i++) {
+    if (i < period - 1) {
+      sma.push(NaN);
+      continue;
+    }
+    sma.push(mean(data.slice(i - period + 1, i + 1)));
   }
-];
+  return sma;
+};
 
-// --- EXPORTED FUNCTIONS ---
+const calculateEMA = (data: number[], period: number): number[] => {
+  const k = 2 / (period + 1);
+  const ema: number[] = [data[0]];
+  for (let i = 1; i < data.length; i++) {
+    ema.push(data[i] * k + ema[i - 1] * (1 - k));
+  }
+  return ema;
+};
 
-export const getPatternDetails = async (patternName: string): Promise<PatternData> => {
-  // Simulate database latency
-  await new Promise(resolve => setTimeout(resolve, 200));
-  return PATTERN_DB[patternName] || {
-    name: patternName,
-    description: "Pattern data unavailable in local database.",
-    significance: "Neutral",
-    chartData: [],
-    strategyTips: []
+const calculateRSI = (data: number[], period: number = 14): number[] => {
+  const rsi: number[] = [];
+  let gains = 0;
+  let losses = 0;
+
+  for (let i = 1; i <= period; i++) {
+    const diff = data[i] - data[i - 1];
+    if (diff > 0) gains += diff;
+    else losses -= diff;
+  }
+  let avgGain = gains / period;
+  let avgLoss = losses / period;
+  
+  rsi.push(100 - (100 / (1 + avgGain / avgLoss)));
+
+  for (let i = period + 1; i < data.length; i++) {
+    const diff = data[i] - data[i - 1];
+    const currentGain = diff > 0 ? diff : 0;
+    const currentLoss = diff < 0 ? -diff : 0;
+    
+    avgGain = (avgGain * (period - 1) + currentGain) / period;
+    avgLoss = (avgLoss * (period - 1) + currentLoss) / period;
+    
+    const rs = avgGain / avgLoss;
+    rsi.push(100 - (100 / (1 + rs)));
+  }
+  return Array(period).fill(NaN).concat(rsi);
+};
+
+const calculateMACD = (data: number[]) => {
+  const ema12 = calculateEMA(data, 12);
+  const ema26 = calculateEMA(data, 26);
+  const macdLine = ema12.map((v, i) => v - ema26[i]);
+  const signalLine = calculateEMA(macdLine.filter(n => !isNaN(n)), 9);
+  
+  // Pad signal line to match length
+  const padding = Array(data.length - signalLine.length).fill(NaN);
+  return { 
+    macdLine, 
+    signalLine: [...padding, ...signalLine], 
+    histogram: macdLine.map((v, i) => v - ([...padding, ...signalLine][i] || 0)) 
   };
 };
 
-export const getStrategyContent = async (strategyName: string): Promise<string> => {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return STRATEGY_DATA[strategyName] || "Content unavailable.";
+const calculateBollingerBands = (data: number[], period: number = 20, multiplier: number = 2) => {
+  const sma = calculateSMA(data, period);
+  const upper = [];
+  const lower = [];
+  
+  for(let i=0; i<data.length; i++) {
+    if(i < period - 1) {
+      upper.push(NaN);
+      lower.push(NaN);
+      continue;
+    }
+    const slice = data.slice(i - period + 1, i + 1);
+    const sd = stdDev(slice);
+    upper.push(sma[i] + (sd * multiplier));
+    lower.push(sma[i] - (sd * multiplier));
+  }
+  return { upper, lower, basis: sma };
 };
 
-export const generateTradingQuiz = async (topic: string, difficulty: 'Beginner' | 'Pro'): Promise<QuizQuestion[]> => {
-  await new Promise(resolve => setTimeout(resolve, 400));
-  // In a full implementation, this would filter a massive question bank.
-  // For this offline version, we return a mixed set.
-  return [
-    {
-      id: 1,
-      question: "Which candlestick pattern indicates strong rejection of lower prices?",
-      options: ["Marubozu", "Dragonfly Doji / Hammer", "Shooting Star", "Bearish Engulfing"],
-      correctAnswerIndex: 1,
-      explanation: "A long lower wick (Hammer) shows sellers pushed price down, but buyers overwhelmed them and closed near the high."
-    },
-    {
-      id: 2,
-      question: "What defines a 'Bearish Trend'?",
-      options: ["Red candles", "Lower Highs and Lower Lows", "Price below VWAP", "RSI under 30"],
-      correctAnswerIndex: 1,
-      explanation: "Market structure (LH + LL) is the only true definition of a downtrend."
-    },
-    {
-      id: 3,
-      question: "Where should you typically place a Stop Loss on a Short position?",
-      options: ["Exactly at entry", "Below the low", "Above the recent Swing High", "10 pips away"],
-      correctAnswerIndex: 2,
-      explanation: "The Stop Loss should be where the trade idea is invalidated. If price breaks the recent Swing High, the trend has changed."
-    },
-    {
-      id: 4,
-      question: "What is a 'Liquidity Sweep'?",
-      options: ["A cleaning service", "Price taking out a high/low to hit stops before reversing", "Low volume trading", "A market crash"],
-      correctAnswerIndex: 1,
-      explanation: "Institutions push price into areas of resting orders (stops) to fill their large positions before moving the market."
-    },
-    {
-      id: 5,
-      question: "If your account is $10,000 and you risk 1%, what is your max dollar loss?",
-      options: ["$10", "$50", "$100", "$1000"],
-      correctAnswerIndex: 2,
-      explanation: "1% of 10,000 is 100. This is the golden rule of longevity."
-    }
+const calculateATR = (highs: number[], lows: number[], closes: number[], period: number = 14): number[] => {
+  const tr: number[] = [highs[0] - lows[0]];
+  for (let i = 1; i < highs.length; i++) {
+    tr.push(Math.max(
+      highs[i] - lows[i],
+      Math.abs(highs[i] - closes[i - 1]),
+      Math.abs(lows[i] - closes[i - 1])
+    ));
+  }
+  return calculateEMA(tr, period);
+};
+
+const calculatePivotPoints = (high: number, low: number, close: number) => {
+  const p = (high + low + close) / 3;
+  const r1 = 2 * p - low;
+  const s1 = 2 * p - high;
+  const r2 = p + (high - low);
+  const s2 = p - (high - low);
+  return { p, r1, s1, r2, s2 };
+};
+
+// --- Data Fetching ---
+
+const fetchCandles = async (symbol: string, timeframe: string, limit: number = 200) => {
+  let fsym = symbol.toUpperCase().replace('/USDT', '').replace('/USD', '').split('/')[0];
+  const tsym = 'USD';
+  
+  // Mapping
+  let endpoint = 'histohour';
+  if (timeframe === '15m') endpoint = 'histominute';
+  if (timeframe.includes('d') || timeframe.includes('w')) endpoint = 'histoday';
+
+  const url = `https://min-api.cryptocompare.com/data/v2/${endpoint}?fsym=${fsym}&tsym=${tsym}&limit=${limit}`;
+  const response = await fetch(url);
+  const json = await response.json();
+  
+  if (json.Response === 'Error') throw new Error(json.Message);
+  
+  return json.Data.Data.map((d: any) => ({
+    time: d.time, open: d.open, high: d.high, low: d.low, close: d.close, volume: d.volumeto
+  }));
+};
+
+// --- Engine Core ---
+
+export const analyzeMarket = async (request: AnalysisRequest): Promise<TradeSignal> => {
+  const { symbol, timeframe } = request;
+  
+  // 1. Parallel Data Fetching for Multi-Timeframe Analysis
+  // We fetch: Requested TF, 4H (Intermediate), Daily (Macro)
+  const fetchPromises = [
+    fetchCandles(symbol, timeframe, 200), // Main
+    fetchCandles(symbol, '1d', 30)       // Macro (for pivots & trend)
   ];
-};
-
-// IMPROVED MENTOR LOGIC
-export const chatWithTutor = async (history: {role: 'user'|'model', content: string}[], message: string) => {
-  await new Promise(resolve => setTimeout(resolve, 600)); // Thinking delay
   
-  const lowerMsg = message.toLowerCase();
+  // Only fetch 4h if main is not 4h or 1d
+  if (timeframe !== '4h' && timeframe !== '1d' && timeframe !== '1w') {
+    fetchPromises.push(fetchCandles(symbol, '4h', 100));
+  }
+
+  const results = await Promise.all(fetchPromises);
+  const mainCandles: Candle[] = results[0];
+  const dailyCandles: Candle[] = results[1];
+  const fourHCandles: Candle[] = results.length > 2 ? results[2] : results[0]; // Fallback if 4h not fetched
+
+  // 2. Process Data Arrays
+  const closes = mainCandles.map(c => c.close);
+  const currentPrice = closes[closes.length - 1];
+  const prevDaily = dailyCandles[dailyCandles.length - 2]; // Yesterday's complete candle
+
+  // 3. Calculate Indicators (Main TF)
+  const ema50 = calculateEMA(closes, 50);
+  const ema200 = calculateEMA(closes, 200);
+  const rsi = calculateRSI(closes, 14);
+  const macd = calculateMACD(closes);
+  const bb = calculateBollingerBands(closes);
+  const atr = calculateATR(mainCandles.map(c=>c.high), mainCandles.map(c=>c.low), closes, 14);
   
-  // 1. Exact Pattern Match Check
-  for (const key in PATTERN_DB) {
-    if (lowerMsg.includes(key.toLowerCase())) {
-       const p = PATTERN_DB[key];
-       return `### ${p.name}\n\n${p.description}\n\n**Strategy Tip:** ${p.strategyTips[0]}`;
+  // 4. Calculate Indicators (Macro/Secondary TF)
+  const dailyEMA200 = calculateEMA(dailyCandles.map(c=>c.close), 200);
+  const fourHEMA200 = calculateEMA(fourHCandles.map(c=>c.close), 200);
+
+  // 5. Current Values
+  const curRSI = rsi[rsi.length - 1];
+  const curATR = atr[atr.length - 1];
+  const curMACD = macd.histogram[macd.histogram.length - 1];
+  const prevMACD = macd.histogram[macd.histogram.length - 2];
+  const curEMA200 = ema200[ema200.length - 1];
+  
+  // 6. Trend Analysis (Multi-Timeframe)
+  const getTrend = (price: number, ema: number): 'BULLISH'|'BEARISH' => price > ema ? 'BULLISH' : 'BEARISH';
+  
+  const mainTrend = getTrend(currentPrice, curEMA200);
+  const dailyTrend = getTrend(dailyCandles[dailyCandles.length-1].close, dailyEMA200[dailyEMA200.length-1]);
+  const fourHTrend = getTrend(fourHCandles[fourHCandles.length-1].close, fourHEMA200[fourHEMA200.length-1]);
+
+  // 7. Pivot Points (Institutional Levels)
+  const pivots = calculatePivotPoints(prevDaily.high, prevDaily.low, prevDaily.close);
+
+  // 8. CONFLUENCE SCORING ENGINE
+  let score = 0; // -100 to 100
+  let rationale: string[] = [];
+  let risks: string[] = [];
+  let keyIndicators: any[] = [];
+
+  // A. Trend Confluence (Max 40 pts)
+  if (mainTrend === dailyTrend) {
+    score += (mainTrend === 'BULLISH' ? 25 : -25);
+    rationale.push(`Macro Trend Alignment: Daily and ${timeframe} are both ${mainTrend}.`);
+  } else {
+    risks.push(`Trend Conflict: Daily is ${dailyTrend} while ${timeframe} is ${mainTrend}.`);
+  }
+
+  // B. Momentum (Max 30 pts)
+  // RSI
+  if (curRSI < 30) {
+    score += 15; // Oversold -> Bullish reversal potential
+    keyIndicators.push({ name: 'RSI', value: curRSI.toFixed(1), signal: 'BULLISH' });
+    rationale.push('RSI is Oversold (Value opportunity).');
+  } else if (curRSI > 70) {
+    score -= 15; // Overbought -> Bearish reversal potential
+    keyIndicators.push({ name: 'RSI', value: curRSI.toFixed(1), signal: 'BEARISH' });
+    rationale.push('RSI is Overbought (Pullback risk).');
+  } else {
+    // Trend continuation logic
+    if (mainTrend === 'BULLISH' && curRSI > 50) score += 5;
+    if (mainTrend === 'BEARISH' && curRSI < 50) score -= 5;
+    keyIndicators.push({ name: 'RSI', value: curRSI.toFixed(1), signal: 'NEUTRAL' });
+  }
+
+  // MACD
+  if (curMACD > 0 && curMACD > prevMACD) {
+    score += 10;
+    keyIndicators.push({ name: 'MACD', value: 'Rising', signal: 'BULLISH' });
+  } else if (curMACD < 0 && curMACD < prevMACD) {
+    score -= 10;
+    keyIndicators.push({ name: 'MACD', value: 'Falling', signal: 'BEARISH' });
+  }
+
+  // C. Price Action & Structure (Max 30 pts)
+  // Check vs EMA200
+  if (currentPrice > curEMA200) {
+    score += 10;
+    keyIndicators.push({ name: 'EMA 200', value: 'Price Above', signal: 'BULLISH' });
+  } else {
+    score -= 10;
+    keyIndicators.push({ name: 'EMA 200', value: 'Price Below', signal: 'BEARISH' });
+  }
+
+  // Bollinger Squeeze?
+  const bandwidth = (bb.upper[bb.upper.length-1] - bb.lower[bb.lower.length-1]) / bb.basis[bb.basis.length-1];
+  if (bandwidth < 0.05) {
+    rationale.push('Bollinger Squeeze detected: High volatility breakout imminent.');
+  }
+
+  // 9. Signal Generation
+  let signal: SignalType = SignalType.NEUTRAL;
+  if (score >= 35) signal = SignalType.LONG;
+  else if (score <= -35) signal = SignalType.SHORT;
+
+  // 10. Risk Management
+  const slATRMult = 1.5;
+  const tpATRMult = 2.5;
+  let sl = 0, tp1 = 0, tp2 = 0;
+
+  if (signal === SignalType.LONG) {
+    sl = currentPrice - (curATR * slATRMult);
+    // Target R1 or ATR target, whichever is logical
+    tp1 = currentPrice + (curATR * 2);
+    tp2 = pivots.r2 > currentPrice ? pivots.r2 : currentPrice + (curATR * 3.5);
+    
+    // Check against Pivot Resistance
+    if (pivots.r1 > currentPrice && pivots.r1 < tp1) {
+        risks.push(`Pivot R1 ($${pivots.r1.toFixed(2)}) is a nearby resistance.`);
     }
-  }
+  } else if (signal === SignalType.SHORT) {
+    sl = currentPrice + (curATR * slATRMult);
+    tp1 = currentPrice - (curATR * 2);
+    tp2 = pivots.s2 < currentPrice ? pivots.s2 : currentPrice - (curATR * 3.5);
 
-  // 2. Weighted Keyword Scoring Algorithm
-  let bestMatch: BrainNode | null = null;
-  let highestScore = 0;
-
-  for (const node of MENTOR_KNOWLEDGE_BASE) {
-    let score = 0;
-    let matchedKeywords = 0;
-
-    node.keywords.forEach(k => {
-      if (lowerMsg.includes(k)) {
-        score += node.weight;
-        matchedKeywords++;
-      }
-    });
-
-    // Bonus for multiple keyword matches (specificity)
-    if (matchedKeywords > 1) score += 2;
-
-    if (score > highestScore) {
-      highestScore = score;
-      bestMatch = node;
+    if (pivots.s1 < currentPrice && pivots.s1 > tp1) {
+        risks.push(`Pivot S1 ($${pivots.s1.toFixed(2)}) is a nearby support.`);
     }
+  } else {
+    // Neutral visualizer
+    sl = currentPrice * 0.99;
+    tp1 = currentPrice * 1.01;
+    tp2 = currentPrice * 1.02;
   }
 
-  if (bestMatch && highestScore > 0) {
-    return bestMatch.response;
-  }
-
-  // Fallback
-  return "**I am analyzing your request...**\n\nThat is a complex query. Could you specify if you are asking about **Technical Analysis**, **Psychology**, or **Risk Management**? \n\nTry asking: *'What is a fakeout?'* or *'I keep losing trades.'*";
+  const confidence = Math.min(Math.abs(score) + 30, 95); // normalize to 100 roughly
+  
+  return {
+    signal,
+    symbol: request.symbol.toUpperCase(),
+    timeframe: request.timeframe,
+    entryPrice: `$${currentPrice.toFixed(2)}`,
+    entryPriceNumeric: currentPrice,
+    stopLoss: Number(sl.toFixed(2)),
+    takeProfit: [Number(tp1.toFixed(2)), Number(tp2.toFixed(2))],
+    positionSize: request.balance ? "Calculated based on risk" : "2% Risk / Trade",
+    expectedRR: Number(((Math.abs(tp1 - currentPrice) / Math.abs(currentPrice - sl))).toFixed(2)),
+    riskLevel: curRSI > 80 || curRSI < 20 ? 'HIGH' : 'MEDIUM',
+    confidenceScore: Math.round(confidence),
+    probability: Number((confidence / 100).toFixed(2)),
+    marketSentiment: confidence > 80 ? (signal === 'LONG' ? 'EXTREME GREED' : 'EXTREME FEAR') : 'NEUTRAL',
+    trendAlignment: [
+      { timeframe: 'Daily', trend: dailyTrend, strength: 80, ema200: dailyEMA200[dailyEMA200.length-1], price: 0 },
+      { timeframe: '4H', trend: fourHTrend, strength: 70, ema200: fourHEMA200[fourHEMA200.length-1], price: 0 },
+      { timeframe: request.timeframe, trend: mainTrend, strength: 60, ema200: curEMA200, price: currentPrice }
+    ],
+    liquidityZones: [
+      { name: 'Pivot R2', price: pivots.r2, type: 'RESISTANCE' },
+      { name: 'Pivot R1', price: pivots.r1, type: 'RESISTANCE' },
+      { name: 'Pivot P', price: pivots.p, type: 'PIVOT' },
+      { name: 'Pivot S1', price: pivots.s1, type: 'SUPPORT' },
+      { name: 'Pivot S2', price: pivots.s2, type: 'SUPPORT' },
+    ],
+    keyIndicators,
+    rationale,
+    contrarianRisks: risks.length > 0 ? risks : ['Market volatility news.'],
+    marketConditions: `Volatility (ATR): ${curATR.toFixed(2)} | B-Band Width: ${bandwidth.toFixed(3)}`,
+    humanSummary: `Systems indicate a ${signal.toLowerCase()} bias driven by ${mainTrend.toLowerCase()} macro trend and ${curMACD > 0 ? 'positive' : 'negative'} momentum.`,
+    sources: [{ title: 'CryptoCompare API', uri: 'https://data.cryptocompare.com' }]
+  };
 };
