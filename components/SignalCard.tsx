@@ -42,7 +42,7 @@ const SignalCard: React.FC<Props> = ({ data }) => {
                 <span className="text-xl font-bold text-slate-200">{data.symbol}</span>
                 <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 border border-slate-700 text-slate-400 font-mono">{data.timeframe}</span>
               </div>
-              <p className="text-slate-500 text-xs font-mono uppercase tracking-widest">Autonomous Professional Analyst</p>
+              <p className="text-slate-500 text-xs font-mono uppercase tracking-widest">Professional Analyst</p>
             </div>
           </div>
 
