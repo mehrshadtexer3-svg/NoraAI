@@ -3,71 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EagleNova</title>
-    <link rel="icon" type="png" href="https://eaglenova.site/logo.png">
+    <title>TradeMind Rule-Based Analyst</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
+    "recharts": "https://esm.sh/recharts@2.12.2?external=react,react-dom",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
+  }
+}
+</script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
             colors: {
-              trade: {
-                dark: '#0B1120',
-                primary: '#F59E0B', /* Amber Gold */
-                secondary: '#3B82F6', /* Royal Blue */
-                accent: '#10B981',
-                danger: '#EF4444',
-                surface: '#1E293B',
-                text: '#F8FAFC',
-                muted: '#94A3B8'
+              gray: {
+                750: '#2d3748',
+                850: '#1a202c',
+                950: '#0d1117',
               }
             }
-          }
-        }
+          },
+        },
       }
     </script>
     <style>
       body {
-        background-color: #0B1120;
-        color: #F8FAFC;
-        font-family: 'Inter', sans-serif;
+        background-color: #0f172a; /* slate-950 */
+        color: #e2e8f0; /* slate-200 */
       }
-      /* Custom scrollbar for dark theme */
+      /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
-        height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #1E293B; 
+        background: #1e293b;
       }
       ::-webkit-scrollbar-thumb {
-        background: #475569; 
+        background: #475569;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #64748b; 
-      }
-      .prose strong {
-        color: #F59E0B;
+        background: #64748b;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>
